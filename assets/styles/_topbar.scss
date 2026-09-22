@@ -21,7 +21,13 @@
 
 .topbar__wordmark {
     display: flex;
-    align-items: center;
+    // Baseline (not center) so "Storybook" and "V.1." share the same
+    // text baseline like normal running text — box-bottom alignment
+    // (align-items: flex-end) looked right for the box edges but left
+    // "V.1." sitting visibly below "Storybook"'s actual glyph baseline,
+    // since its much shorter line-height box has less built-in padding
+    // above the glyph.
+    align-items: baseline;
     gap: map-get($ds-spacers, md);
     text-decoration: none;
     color: inherit;
@@ -29,6 +35,11 @@
 
 .topbar__wordmark-logo {
     flex: 0 0 auto;
+    // SVGs have no text baseline to align to — center it against the
+    // row instead of leaving it to the browser's default (which treats
+    // an inline-level replaced element's own bottom edge as its
+    // "baseline", visually dropping it too).
+    align-self: center;
 }
 
 .topbar__wordmark-brand {
@@ -43,9 +54,9 @@
 }
 
 .topbar__wordmark-sub {
-    // Sits on its own baseline at the bottom of the wordmark row (next to
-    // the taller "Storybook" text), not vertically centered with it.
-    align-self: flex-end;
+    // No align-self override — inherits baseline from .topbar__wordmark,
+    // so it sits on the same text baseline as "Storybook" instead of
+    // matching its box-bottom edge.
     font-size: ds-ramp("caption", size);
     line-height: ds-ramp("caption", line-height);
     color: var(--ds-text-muted);
