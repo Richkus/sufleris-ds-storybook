@@ -21,10 +21,14 @@
 
 .topbar__wordmark {
     display: flex;
-    align-items: baseline;
+    align-items: center;
     gap: map-get($ds-spacers, md);
     text-decoration: none;
     color: inherit;
+}
+
+.topbar__wordmark-logo {
+    flex: 0 0 auto;
 }
 
 .topbar__wordmark-brand {
@@ -32,7 +36,10 @@
     font-size: 22px;
     line-height: 32px;
     letter-spacing: -0.02em;
-    color: $teal-400;
+    // Matches Figma's "Storybook" text color (#405359, same as
+    // --ds-text-title) — was a teal brand accent before the MS-sb-logo
+    // rebrand, now the logo mark itself is what carries the brand color.
+    color: var(--ds-text-title);
 }
 
 .topbar__wordmark-sub {
