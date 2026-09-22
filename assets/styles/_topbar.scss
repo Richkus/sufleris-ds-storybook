@@ -21,12 +21,6 @@
 
 .topbar__wordmark {
     display: flex;
-    // Baseline (not center) so "Storybook" and "V.1." share the same
-    // text baseline like normal running text — box-bottom alignment
-    // (align-items: flex-end) looked right for the box edges but left
-    // "V.1." sitting visibly below "Storybook"'s actual glyph baseline,
-    // since its much shorter line-height box has less built-in padding
-    // above the glyph.
     align-items: baseline;
     gap: map-get($ds-spacers, md);
     text-decoration: none;
@@ -44,22 +38,13 @@
 
 .topbar__wordmark-brand {
     font-weight: 700;
-    font-size: 20px;
+    font-size: 18px;
     line-height: 32px;
     letter-spacing: -0.02em;
     // Matches Figma's "Storybook" text color (#405359, same as
     // --ds-text-title) — was a teal brand accent before the MS-sb-logo
     // rebrand, now the logo mark itself is what carries the brand color.
     color: var(--ds-text-title);
-}
-
-.topbar__wordmark-sub {
-    // No align-self override — inherits baseline from .topbar__wordmark,
-    // so it sits on the same text baseline as "Storybook" instead of
-    // matching its box-bottom edge.
-    font-size: ds-ramp("caption", size);
-    line-height: ds-ramp("caption", line-height);
-    color: var(--ds-text-muted);
 }
 
 .topbar__actions {

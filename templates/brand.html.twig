@@ -34,8 +34,8 @@
             </div>
         </div>
 
-        <a href="#" class="btn-ds-download">{{ icons.icon('download', 16) }} Atsisiųsti logotipus</a>
+        <a href="#" class="btn-ds-download" x-data @click.prevent="Alpine.store('toasts').push('VĖLIAU PRADĖS VEIKTI ŠITAS, REIKĖS UŽKELTI FAILUS :)')">{{ icons.icon('download', 16) }} Atsisiųsti logotipus</a>
     </section>
 
-    <a href="https://www.figma.com/design/ZkRyyI5TEHeg7IuUAz4HxW/?node-id=5684-5" target="_blank" rel="noopener noreferrer" class="ds-figma-link">{{ icons.icon('external-link', 14) }} Figmoje</a>
+    <a href="https://www.figma.com/design/oBngpj6ZsCe8CN82doOzf9/?node-id=8138-13650" target="_blank" rel="noopener noreferrer" class="ds-figma-link">{{ icons.icon('external-link', 14) }} Figmoje</a>
 {% endblock %}
