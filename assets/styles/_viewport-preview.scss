@@ -65,6 +65,10 @@
     justify-content: center;
     padding: map-get($ds-spacers, "3xl") map-get($ds-spacers, xl);
     background: var(--ds-bg-page);
+    // Same grey outline as .ds-group's "Variants & States" boxes, so a
+    // preview area reads as one consistent kind of container across the
+    // page, not a different, border-less treatment.
+    border: 1px solid var(--ds-border);
     border-radius: map-get($ds-radii, lg);
     overflow-x: auto;
 }
