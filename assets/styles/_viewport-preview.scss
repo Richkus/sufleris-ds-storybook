@@ -60,10 +60,6 @@
 
 // The stage centers the frame and gives Tablet/Mobile room to show their
 // full fixed size without the surrounding page fighting them for width.
-// No border of its own — the outer .viewport-preview is a .ds-group now
-// (same card as toolbar + Kodas toggle + code panel), so a second stroke
-// here would double up into a nested-box look, same reasoning as the
-// tablet/mobile frame fix below.
 .viewport-preview__stage {
     display: flex;
     justify-content: center;
@@ -72,6 +68,10 @@
     // --ds-bg-page — that read as a thick green/teal outline around the
     // frame rather than a plain surface.
     background: var(--ds-bg-surface);
+    // Same grey outline as .ds-group's "Variants & States" boxes, so a
+    // preview area reads as one consistent kind of container across the
+    // page, not a different, border-less treatment.
+    border: 1px solid var(--ds-border);
     border-radius: map-get($ds-radii, lg);
     overflow-x: auto;
 }
