@@ -8,7 +8,12 @@
     justify-content: space-between;
     height: 55px;
     flex: 0 0 auto;
-    padding: 0 32px;
+    // Left padding matches the sidebar nav items' own left offset exactly
+    // (.sidebar__nav's left padding (lg) + .sidebar__item's own left
+    // padding (lg) = 3xl) so the wordmark lines up with "Foundations" etc.
+    // below it instead of sitting further right. Right side keeps the
+    // wider 4xl gutter — nothing below it to align with.
+    padding: 0 32px 0 map-get($ds-spacers, "3xl");
     border-bottom: 1px solid var(--ds-border);
     position: relative;
     z-index: 20;
