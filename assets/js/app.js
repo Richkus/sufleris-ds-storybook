@@ -201,6 +201,19 @@ window.dsSetShowCode = function dsSetShowCode(value) {
 };
 
 /**
+ * Reusable Desktop/Tablet/Mobile switcher for component preview areas
+ * (see _viewport-preview.html.twig) — local x-data per instance, not a
+ * shared store, since a page can embed more than one preview and each
+ * one's breakpoint choice is independent. Not persisted: it's a demo
+ * toggle for the current visit, not a durable preference.
+ */
+window.viewportPreview = function viewportPreview() {
+    return {
+        current: 'desktop',
+    };
+};
+
+/**
  * Sidebar section expand/collapse state (see _sidebar.html.twig) — all
  * sections start expanded on a first visit (nothing in localStorage
  * yet), then whatever the user last left open/closed sticks on later

@@ -1,0 +1,51 @@
+{% import "partials/_icons.html.twig" as icons %}
+{#
+    Reusable responsive viewport preview — Desktop/Tablet/Mobile switcher
+    wrapping a component demo. For interactive components (Button, Input,
+    Modal, Tabs, Card, Navigation, Table, Forms, ...) where responsive
+    behavior is actually worth checking — NOT for Foundation/token pages
+    (Colors, Typography, Spacing, Icons), where a device frame means
+    nothing. Only add it to a page if the component's layout could
+    plausibly change across breakpoints.
+
+    Usage — wrap the demo markup in {% block preview %} via {% embed %}:
+
+        {% embed "partials/_viewport-preview.html.twig" %}
+            {% block preview %}
+                ... component demo markup ...
+            {% endblock %}
+        {% endembed %}
+
+    Switching Desktop/Tablet/Mobile only resizes/frames
+    .viewport-preview__frame — it's a single element that stays mounted
+    the whole time, so the demo markup inside is never re-rendered or
+    duplicated per breakpoint, just reflowed by its new container size
+    (same as resizing a real browser window).
+
+    Desktop has no fixed frame (uses the available preview width, per the
+    "1440" figure being a nominal desktop reference, not a hard viewport);
+    Tablet (768×1024) and Mobile (375×812) are real fixed-size frames with
+    a visible border so the boundary is unambiguous.
+#}
+<div class="viewport-preview" x-data="viewportPreview()">
+    <div class="viewport-preview__toolbar" role="tablist" aria-label="Peržiūros dydis">
+        <button type="button" class="viewport-preview__tab" :class="{ 'is-active': current === 'desktop' }" @click="current = 'desktop'" data-tooltip="Desktop · 1440px" role="tab" :aria-selected="(current === 'desktop').toString()">
+            {{ icons.icon('monitor', 16) }}
+            <span>Desktop</span>
+        </button>
+        <button type="button" class="viewport-preview__tab" :class="{ 'is-active': current === 'tablet' }" @click="current = 'tablet'" data-tooltip="Tablet · 768×1024" role="tab" :aria-selected="(current === 'tablet').toString()">
+            {{ icons.icon('tablet', 16) }}
+            <span>Tablet</span>
+        </button>
+        <button type="button" class="viewport-preview__tab" :class="{ 'is-active': current === 'mobile' }" @click="current = 'mobile'" data-tooltip="Mobile · 375×812" role="tab" :aria-selected="(current === 'mobile').toString()">
+            {{ icons.icon('smartphone', 16) }}
+            <span>Mobile</span>
+        </button>
+    </div>
+
+    <div class="viewport-preview__stage">
+        <div class="viewport-preview__frame" :class="'viewport-preview__frame--' + current">
+            {% block preview %}{% endblock %}
+        </div>
+    </div>
+</div>

@@ -1,0 +1,40 @@
+{% set currentPage = 'modal' %}
+{% extends "base.html.twig" %}
+{% import "partials/_icons.html.twig" as icons %}
+
+{% block title %}Modal — {{ parent() }}{% endblock %}
+
+{% block content %}
+    {% include "partials/_page-header.html.twig" with {
+        title: 'Modal',
+        subtitle: 'Modaliniai langai perima dėmesį svarbiam veiksmui ar pranešimui. Default patvirtinimui, Destructive negrįžtamiems veiksmams (visada su patvirtinimo dialogu), Feedback atsiliepimams rinkti, Form trumpoms formoms, Illustration didesnio konteksto pranešimams su iliustracija.',
+    } %}
+
+    <section class="ds-section">
+        <h2 class="ds-section__title">Default</h2>
+
+        {% embed "partials/_viewport-preview.html.twig" %}
+            {% block preview %}
+                <div x-data="{ open: false }">
+                    <button type="button" class="btn-ds btn-ds--primary" @click="open = true">Atidaryti modalą</button>
+
+                    <div class="modal-ds__backdrop" x-show="open" x-cloak @click.self="open = false" @keydown.escape.window="open = false" x-transition.opacity.duration.150ms>
+                        <div class="modal-ds__dialog" role="dialog" aria-modal="true" aria-labelledby="modal-demo-title" x-show="open" x-transition:enter.duration.200ms x-transition:enter.opacity.scale.95 x-transition:leave.duration.150ms>
+                            <div class="modal-ds__header">
+                                <div class="modal-ds__title-row">
+                                    <h2 class="modal-ds__title" id="modal-demo-title">Pradėti iš naujo?</h2>
+                                    <button type="button" class="modal-ds__close" @click="open = false" aria-label="Uždaryti">{{ icons.icon('x', 18) }}</button>
+                                </div>
+                                <p class="modal-ds__body">Jūsų pateikti duomenys bus panaikinti. Naują išaiškinimą gausite įvedę duomenis iš naujo.</p>
+                            </div>
+                            <div class="modal-ds__actions">
+                                <a href="#" class="btn-ds btn-ds--primary" @click.prevent="open = false">Pradėti</a>
+                                <a href="#" class="btn-ds btn-ds--secondary" @click.prevent="open = false">Uždaryti</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endblock %}
+        {% endembed %}
+    </section>
+{% endblock %}

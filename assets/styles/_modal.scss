@@ -1,0 +1,95 @@
+// ==========================================================================
+// Modal — synced from Figma's Modals page (node 5681:3171, "Modal/Default").
+//
+// Positioned absolute within its nearest `position: relative` ancestor
+// (here, .viewport-preview__frame) rather than fixed to the browser
+// viewport — this is a documentation/demo surface, not the real product,
+// so opening it should stay contained to the preview frame instead of
+// covering the whole admin page.
+// ==========================================================================
+
+.modal-ds__backdrop {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: map-get($ds-spacers, xl);
+    background: rgba($grey-900, 0.4);
+    z-index: 10;
+}
+
+.modal-ds__dialog {
+    display: flex;
+    flex-direction: column;
+    gap: map-get($ds-spacers, "4xl");
+    width: 400px;
+    max-width: 100%;
+    padding: map-get($ds-spacers, "4xl");
+    background: var(--ds-bg-shell);
+    border: 1px solid $grey-300;
+    border-radius: map-get($ds-radii, xl);
+    // Deliberate brand-teal-tinted shadow straight from Figma's "shadow-lg"
+    // effect style (#005A5A at ~15% alpha) — same one-off-hex reasoning as
+    // --ds-hero-text in _wellcome.scss, not a token oversight.
+    box-shadow: 0 0 24px rgba(0, 90, 90, 0.15);
+}
+
+.modal-ds__header {
+    display: flex;
+    flex-direction: column;
+    gap: map-get($ds-spacers, lg);
+}
+
+.modal-ds__title-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: map-get($ds-spacers, lg);
+}
+
+.modal-ds__title {
+    margin: 0;
+    font-family: var(--ds-font-family);
+    font-size: ds-ramp("h4", size);
+    line-height: ds-ramp("h4", line-height);
+    font-weight: ds-ramp("h4", weight);
+    color: var(--ds-text-title);
+}
+
+.modal-ds__close {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    background: transparent;
+    border: none;
+    border-radius: map-get($ds-radii, xs);
+    color: var(--ds-text-muted);
+    cursor: pointer;
+    transition: color 0.15s ease, background-color 0.15s ease;
+
+    svg { width: 18px; height: 18px; }
+
+    &:hover {
+        color: var(--ds-text-title);
+        background: var(--ds-bg-surface-hover);
+    }
+}
+
+.modal-ds__body {
+    margin: 0;
+    font-family: var(--ds-font-family);
+    font-size: ds-ramp("text-intro", size);
+    line-height: ds-ramp("text-intro", line-height);
+    color: var(--ds-text-body);
+}
+
+.modal-ds__actions {
+    display: flex;
+    align-items: center;
+    gap: map-get($ds-spacers, xl);
+}
