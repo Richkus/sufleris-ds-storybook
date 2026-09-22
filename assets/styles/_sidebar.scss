@@ -41,6 +41,35 @@
     margin-top: map-get($ds-spacers, "3xl");
 }
 
+// Standalone top-level link (see _sidebar.html.twig) — same box model as
+// .sidebar__item below, but bolder (matches .sidebar__section-header's
+// weight) since it sits as a peer of the section groups, not nested
+// inside one, and gets its own bottom margin to separate it from
+// "Foundations" below.
+.sidebar__top-link {
+    display: flex;
+    align-items: center;
+    height: 34px;
+    padding: 0 map-get($ds-spacers, lg);
+    margin-bottom: map-get($ds-spacers, xl);
+    font-family: var(--ds-font-family);
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ds-text-title);
+    text-decoration: none;
+    border-radius: map-get($ds-radii, sm);
+    transition: background-color 0.15s ease, color 0.15s ease;
+
+    &:hover {
+        background: var(--ds-accent-bg);
+    }
+
+    &.is-active {
+        background: var(--ds-accent-bg);
+        color: var(--ds-accent);
+    }
+}
+
 .sidebar__section-header {
     display: flex;
     align-items: center;

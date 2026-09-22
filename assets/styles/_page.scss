@@ -107,6 +107,30 @@
     opacity: 0.45;
 }
 
+// Text-heavy documentation pages (Introduction and any future prose page)
+// — Bootstrap's own p/ul defaults are close enough, this just adds the
+// vertical rhythm between them and a brand-neutral inline <code> style
+// instead of Bootstrap's default pink $code-color.
+.ds-prose {
+    max-width: 68ch;
+
+    p, ul, ol {
+        margin-bottom: map-get($ds-spacers, xl);
+    }
+
+    li {
+        margin-bottom: map-get($ds-spacers, xs);
+    }
+
+    code {
+        padding: 0.15em 0.4em;
+        background: var(--ds-bg-surface);
+        border-radius: map-get($ds-radii, xs);
+        color: var(--ds-text-title);
+        font-size: 0.9em;
+    }
+}
+
 .ds-figma-link {
     display: inline-flex;
     // .app-content is a flex column (see _layout.scss) — without this,

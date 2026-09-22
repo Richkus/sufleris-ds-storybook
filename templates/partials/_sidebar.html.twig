@@ -75,6 +75,14 @@
         instead of resetting every page load.
     #}
     <div class="sidebar__nav" x-data="dsSidebarState()">
+        {#
+            Standalone top-level link, above the collapsible Foundations/
+            Components/Patterns groups — same pattern Tailwind/shadcn use
+            for their own "Introduction" page (an entry point into the
+            whole system, not a foundation among others).
+        #}
+        <a href="introduction.html" class="sidebar__top-link {{ currentPage == 'introduction' ? 'is-active' }}">Introduction</a>
+
         {% for section in sections %}
             <div class="sidebar__section">
                 <button type="button" class="sidebar__section-header" @click="toggleSection('{{ section.key }}')" :aria-expanded="open.{{ section.key }}.toString()">

@@ -1,0 +1,100 @@
+{% set currentPage = 'introduction' %}
+{% extends "base.html.twig" %}
+
+{% block title %}Introduction — {{ parent() }}{% endblock %}
+
+{% block content %}
+    {% include "partials/_page-header.html.twig" with {
+        title: 'Introduction',
+        subtitle: 'Kodėl ir kaip kuriame Mokesčių Sufleris dizaino sistemą — principai, kuriais remiamės kuriant kiekvieną naują komponentą.',
+    } %}
+
+    <div class="ds-group mb-ds-4xl">
+        <p class="mb-0">
+            <strong>Juodraštis.</strong> Šis puslapis — MVP: pirminė šių principų
+            versija, kad turėtume nuo ko atsispirti. Tiksliname ir pildome kartu,
+            komandoje — ne galutinė, iškaltoje akmenyje versija.
+        </p>
+    </div>
+
+    <div class="ds-prose">
+        <section class="ds-section">
+            <h2 class="ds-section__title">Kas tai yra</h2>
+            <p>
+                Ši dizaino sistema nėra atskiras Figma projektas, kurį kažkas vėliau
+                „išverčia“ į kodą. Tai realus, veikiantis kodas — tas pats stack'as
+                (Twig + SCSS/Bootstrap 5 + Alpine.js), kuriuo galiausiai bus
+                renderinamas ir pats produktas — tam, kad komponentus būtų galima
+                perkelti į realų Symfony/Twig backend'ą su minimaliais pakeitimais,
+                ne perrašyti iš naujo.
+            </p>
+            <p>
+                Figma faile ir šiame repo turi atsispindėti ta pati sistema — jei
+                komponentas pasikeičia viename, jis turi pasikeisti ir kitame.
+            </p>
+        </section>
+
+        <section class="ds-section">
+            <h2 class="ds-section__title">Principai</h2>
+            <ul>
+                <li>
+                    <strong>Tokenai pirmiausia.</strong> Jokių hardcoded hex/px
+                    reikšmių komponento kode — visada per SCSS kintamuosius
+                    (<code>_variables.scss</code>) arba semantinius
+                    <code>--ds-*</code> CSS custom properties (<code>_theme.scss</code>).
+                    Jei reikalingos reikšmės tokenuose nėra — tai pirmiausia
+                    diskusija apie naują tokeną, o ne vienkartinė išimtis kode.
+                </li>
+                <li>
+                    <strong>Bootstrap kaip pamatas, ne kaip galutinis sprendimas.</strong>
+                    Naudojame Bootstrap 5 grid'ą ir bazinius elementus apačioje, bet
+                    komponentus apvelkame savais, semantiniais pavadinimais (pvz.
+                    <code>.btn-ds</code>, <code>.sidebar__item</code>), kad DS
+                    liktų atskiriamas nuo konkrečios Bootstrap versijos ar jos
+                    numatytosios išvaizdos.
+                </li>
+                <li>
+                    <strong>Alpine.js interaktyvumui, ne jQuery.</strong> Deklaratyvus,
+                    lengvas, be papildomo build žingsnio — dropdown'ai, accordion'ai,
+                    live valdikliai (žr. DialKit) rašomi <code>x-data</code>/
+                    <code>Alpine.store()</code> pattern'u.
+                </li>
+                <li>
+                    <strong>Figma ir kodas — vienas šaltinis, ne du.</strong> Naujas
+                    komponentas pirmiausia turi turėti atitinkamą mazgą Figma DS
+                    byloje; spalvos, tarpai, šriftai imami iš ten (per
+                    <code>get_design_context</code>), o ne „iš akies“.
+                </li>
+                <li>
+                    <strong>Show code turi rodyti tiesą.</strong> Jei puslapyje yra
+                    kodo pavyzdys, jis privalo būti generuojamas iš to paties
+                    šaltinio, kuris renderina patį komponentą — ne atskirai
+                    ranka surašytas tekstas, kuris gali išsiskirti nuo realaus
+                    markup'o.
+                </li>
+            </ul>
+        </section>
+
+        <section class="ds-section">
+            <h2 class="ds-section__title">Kada kuriame naują komponentą</h2>
+            <ul>
+                <li>Patikrinti, ar komponentas jau egzistuoja Figma DS byloje — nedubliuoti.</li>
+                <li>Naudoti esamus tarpų/spalvų/šriftų/radius tokenus; naujos reikšmės — tik po diskusijos.</li>
+                <li>Vienas <code>.scss</code> partial'as vienam komponentui, importuotas <code>main.scss</code> (tvarka faile — svarbi).</li>
+                <li>Pakartotinai naudojami blokai — atskiras Twig partial'as <code>templates/partials/</code>, ne kopija kiekviename puslapyje.</li>
+                <li>Pavadinimas — trumpas, angliškas, atitinkantis Figma komponento pavadinimą (pvz. <code>Button</code>, <code>Badge</code>, <code>Tabs</code>); tas pats pavadinimas sidebar'e.</li>
+                <li>CSS klasės — <code>.block__element--modifier</code> (BEM-artimas) stilius, ne atsitiktinės utility klasės tiesiai markup'e.</li>
+            </ul>
+        </section>
+
+        <section class="ds-section">
+            <h2 class="ds-section__title">Stack'as</h2>
+            <ul>
+                <li><strong>Twig</strong> (per <code>twing</code>) — šablonai kompiliuojami į statinį HTML build metu; rašomi taip, kad veiktų ir realiame Symfony/Twig backend'e be didelių pakeitimų.</li>
+                <li><strong>SCSS + Bootstrap 5</strong> per Webpack Encore — token'ai ir jų perrašymai visada prieš <code>@import "bootstrap"</code>.</li>
+                <li><strong>Alpine.js</strong> (+ <code>@alpinejs/collapse</code>) — visam interaktyvumui, be jQuery ir be Bootstrap JS bundle.</li>
+                <li><strong>Prism.js</strong> — komponentų puslapiuose rodomiems kodo pavyzdžiams.</li>
+            </ul>
+        </section>
+    </div>
+{% endblock %}
