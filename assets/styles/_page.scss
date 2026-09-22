@@ -57,6 +57,11 @@
     color: $orange-700;
 }
 
+.ds-status-pill--draft {
+    background: $grey-200;
+    color: $grey-700;
+}
+
 .ds-section {
     margin-bottom: map-get($ds-spacers, "4xl");
 }
