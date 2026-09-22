@@ -33,7 +33,7 @@
 
 .topbar__wordmark-brand {
     font-weight: 700;
-    font-size: 22px;
+    font-size: 20px;
     line-height: 32px;
     letter-spacing: -0.02em;
     // Matches Figma's "Storybook" text color (#405359, same as
@@ -43,6 +43,9 @@
 }
 
 .topbar__wordmark-sub {
+    // Sits on its own baseline at the bottom of the wordmark row (next to
+    // the taller "Storybook" text), not vertically centered with it.
+    align-self: flex-end;
     font-size: ds-ramp("caption", size);
     line-height: ds-ramp("caption", line-height);
     color: var(--ds-text-muted);
