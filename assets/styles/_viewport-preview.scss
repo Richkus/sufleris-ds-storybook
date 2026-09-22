@@ -64,7 +64,10 @@
     display: flex;
     justify-content: center;
     padding: map-get($ds-spacers, "3xl") map-get($ds-spacers, xl);
-    background: var(--ds-bg-page);
+    // Neutral grey (same as .code-panel__body), not the teal-tinted
+    // --ds-bg-page — that read as a thick green/teal outline around the
+    // frame rather than a plain surface.
+    background: var(--ds-bg-surface);
     // Same grey outline as .ds-group's "Variants & States" boxes, so a
     // preview area reads as one consistent kind of container across the
     // page, not a different, border-less treatment.
