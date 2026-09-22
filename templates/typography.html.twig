@@ -1,0 +1,11 @@
+{% set currentPage = 'typography' %}
+{% extends "base.html.twig" %}
+
+{% block title %}Typography — {{ parent() }}{% endblock %}
+
+{% block content %}
+    {% include "partials/_page-header.html.twig" with {
+        title: 'Typography',
+        subtitle: 'Šriftas, dydžiai ir teksto stiliai, naudojami visame produkte.',
+    } %}
+{% endblock %}

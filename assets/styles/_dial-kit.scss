@@ -1,0 +1,293 @@
+// ==========================================================================
+// DialKit-style "live controls" widget — fixed bottom-right, present on
+// every page/shell version. See templates/partials/_dial-kit.html.twig.
+// ==========================================================================
+
+.dial-kit {
+    position: fixed;
+    right: map-get($ds-spacers, "2xl");
+    bottom: map-get($ds-spacers, "2xl");
+    z-index: 200;
+}
+
+.dial-kit__trigger {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: map-get($ds-radii, full);
+    background: var(--ds-bg-shell);
+    border: 1px solid var(--ds-border);
+    color: var(--ds-text-muted);
+    cursor: pointer;
+    box-shadow: 0 4px 16px rgba($grey-900, 0.16), 0 1px 3px rgba($grey-900, 0.08);
+    transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+
+    &:hover,
+    &.is-active {
+        border-color: var(--ds-accent);
+        transform: translateY(-1px);
+    }
+
+    // The generic [data-tooltip] in _topbar.scss centers the tooltip on
+    // the trigger and opens it downward — fine for topbar icons, but
+    // this trigger sits in the bottom-right corner, so a centered
+    // tooltip runs off the right edge and a downward one runs off the
+    // bottom. Anchor it to the trigger's own right edge and open it
+    // upward instead — it can't overflow either edge that way,
+    // regardless of how long the tooltip text is.
+    &[data-tooltip]::after {
+        left: auto;
+        right: 0;
+        top: auto;
+        bottom: calc(100% + #{map-get($ds-spacers, sm)});
+        transform: translate(0, 4px);
+    }
+
+    &[data-tooltip]:hover::after {
+        transform: translate(0, 0);
+    }
+}
+
+.dial-kit__trigger-emoji {
+    // Emoji glyphs size off font-size, not width/height like the SVG
+    // icon set elsewhere — line-height:1 keeps it from nudging the
+    // circle's vertical centering.
+    font-size: 20px;
+    line-height: 1;
+    display: inline-block;
+    transition: transform 0.15s ease;
+
+    // The playful tilt lives on the emoji itself, not on .dial-kit__trigger
+    // — that button is also the [data-tooltip] anchor, and CSS transforms
+    // rotate an element's whole rendered box including its ::after
+    // pseudo-element, which was tilting the tooltip bubble along with it.
+    .dial-kit__trigger:hover &,
+    .dial-kit__trigger.is-active & {
+        transform: rotate(-8deg);
+    }
+}
+
+// Styled after Figma's own right-hand inspector panel (Design/Prototype
+// tabs, "Page"/"Styles"/"Export" rows) per the user's reference — small,
+// dense rows, thin 1px separators instead of hover-pill buttons, neutral
+// greys throughout (color is reserved for the active-state checkmark
+// only, same restraint as Figma's own accent-blue usage in that panel).
+.dial-kit__panel {
+    position: absolute;
+    right: 0;
+    bottom: calc(100% + #{map-get($ds-spacers, lg)});
+    width: 176px;
+    background: var(--ds-bg-shell);
+    border: 1px solid var(--ds-border);
+    border-radius: map-get($ds-radii, md);
+    box-shadow: 0 8px 24px rgba($grey-900, 0.14), 0 1px 3px rgba($grey-900, 0.08);
+    padding: map-get($ds-spacers, xs);
+}
+
+.dial-kit__divider {
+    height: 1px;
+    background: var(--ds-border);
+    margin: map-get($ds-spacers, xs) 0;
+}
+
+.dial-kit__group-label {
+    padding: 0 map-get($ds-spacers, sm);
+    margin-bottom: map-get($ds-spacers, xxs);
+    font-family: var(--ds-font-family);
+    font-size: ds-ramp("text-xs", size);
+    font-weight: 600;
+    color: var(--ds-text-muted);
+}
+
+// Font pickers — a single-row <select> instead of an .dial-kit__option
+// list (see the twig partial's own comment on why: the option list
+// approach doesn't scale as more fonts get added).
+.dial-kit__select-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 0 map-get($ds-spacers, sm) map-get($ds-spacers, xs);
+
+    svg {
+        position: absolute;
+        right: map-get($ds-spacers, lg);
+        color: var(--ds-text-faint);
+        pointer-events: none;
+    }
+}
+
+.dial-kit__select {
+    appearance: none;
+    width: 100%;
+    height: 30px;
+    padding: 0 map-get($ds-spacers, xl) 0 map-get($ds-spacers, sm);
+    border: 1px solid var(--ds-border);
+    border-radius: map-get($ds-radii, sm);
+    background: var(--ds-bg-shell);
+    color: var(--ds-text-body);
+    font-size: ds-ramp("text-xs", size);
+    cursor: pointer;
+    transition: border-color 0.15s ease;
+
+    &:hover {
+        border-color: var(--ds-border-strong);
+    }
+
+    &:focus {
+        outline: none;
+        border-color: var(--ds-border-strong);
+    }
+}
+
+.dial-kit__option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: map-get($ds-spacers, xs) map-get($ds-spacers, sm);
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--ds-border);
+    font-family: var(--ds-font-family);
+    font-size: ds-ramp("text-xs", size);
+    font-weight: 400;
+    color: var(--ds-text-body);
+    text-align: left;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+
+    &:last-child {
+        border-bottom: none;
+    }
+
+    &:hover {
+        background: var(--ds-bg-surface-hover);
+    }
+
+    &.is-active {
+        font-weight: 600;
+    }
+}
+
+.dial-kit__check {
+    display: flex;
+    flex: 0 0 auto;
+    color: var(--ds-accent);
+
+    svg { width: 14px; height: 14px; }
+}
+
+// "Rodyti kodą" row (Kodas group) — same row chrome as .dial-kit__option
+// (border/hover), styled as a toggle rather than a selectable list item.
+.dial-kit__toggle-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: map-get($ds-spacers, xs) map-get($ds-spacers, sm);
+    background: transparent;
+    border: none;
+    font-family: var(--ds-font-family);
+    font-size: ds-ramp("text-xs", size);
+    font-weight: 400;
+    color: var(--ds-text-body);
+    text-align: left;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+
+    &:hover {
+        background: var(--ds-bg-surface-hover);
+    }
+}
+
+.dial-kit__eye {
+    display: flex;
+    flex: 0 0 auto;
+    color: var(--ds-text-muted);
+
+    svg { width: 15px; height: 15px; }
+}
+
+// First-visit coachmark, pointing down at the trigger via the ::after
+// tail below. Styled like a Figma-style callout (Figma reference) but
+// on our own tokens — white/surface card, DS accent-tinted icon badge,
+// so it reads as part of this system rather than a copy of the ref.
+.dial-kit__coachmark {
+    position: absolute;
+    right: 0;
+    bottom: calc(100% + #{map-get($ds-spacers, lg)});
+    width: 272px;
+    display: flex;
+    align-items: flex-start;
+    gap: map-get($ds-spacers, md);
+    background: var(--ds-bg-shell);
+    border: 1px solid var(--ds-border);
+    border-radius: map-get($ds-radii, xl);
+    box-shadow: 0 8px 24px rgba($grey-900, 0.14), 0 1px 3px rgba($grey-900, 0.08);
+    padding: map-get($ds-spacers, xl);
+    padding-right: map-get($ds-spacers, "3xl");
+
+    // Speech-bubble tail, pointing down at the trigger's horizontal
+    // center (44px trigger / 2 = 22px from the shared right edge).
+    &::after {
+        content: "";
+        position: absolute;
+        bottom: -6px;
+        right: 16px;
+        width: 12px;
+        height: 12px;
+        background: var(--ds-bg-shell);
+        border-right: 1px solid var(--ds-border);
+        border-bottom: 1px solid var(--ds-border);
+        border-radius: 0 0 2px 0;
+        transform: rotate(45deg);
+    }
+}
+
+.dial-kit__coachmark-avatar {
+    flex: 0 0 auto;
+    width: 40px;
+    height: 40px;
+    // The source PNG is the exact circular composition exported straight
+    // from the Figma reference (orange disc + photo crop baked in) — no
+    // CSS ring/mask needed, this just guards against a non-square image
+    // ever being swapped in later.
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.dial-kit__coachmark-text {
+    margin: 0;
+    padding-top: 4px;
+    font-family: var(--ds-font-family);
+    font-size: ds-ramp("text-sm", size);
+    line-height: ds-ramp("text-sm", line-height);
+    color: var(--ds-text-body);
+}
+
+.dial-kit__coachmark-close {
+    position: absolute;
+    top: map-get($ds-spacers, sm);
+    right: map-get($ds-spacers, sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    padding: 0;
+    background: transparent;
+    border: none;
+    border-radius: map-get($ds-radii, xs);
+    color: var(--ds-text-faint);
+    cursor: pointer;
+    transition: color 0.15s ease, background-color 0.15s ease;
+
+    svg { width: 12px; height: 12px; }
+
+    &:hover {
+        color: var(--ds-text-title);
+        background: var(--ds-bg-surface-hover);
+    }
+}

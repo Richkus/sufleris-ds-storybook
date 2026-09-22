@@ -1,0 +1,153 @@
+// ==========================================================================
+// Nav/Top bar
+// ==========================================================================
+
+.topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 55px;
+    flex: 0 0 auto;
+    padding: 0 32px;
+    border-bottom: 1px solid var(--ds-border);
+    position: relative;
+    z-index: 20;
+}
+
+.topbar__wordmark {
+    display: flex;
+    align-items: baseline;
+    gap: map-get($ds-spacers, md);
+    text-decoration: none;
+    color: inherit;
+}
+
+.topbar__wordmark-brand {
+    font-weight: 700;
+    font-size: 22px;
+    line-height: 32px;
+    letter-spacing: -0.02em;
+    color: $teal-400;
+}
+
+.topbar__wordmark-sub {
+    font-size: ds-ramp("caption", size);
+    line-height: ds-ramp("caption", line-height);
+    color: var(--ds-text-muted);
+}
+
+.topbar__actions {
+    display: flex;
+    align-items: center;
+    gap: map-get($ds-spacers, md);
+}
+
+.topbar__icon-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    color: var(--ds-text-faint);
+    background: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    text-decoration: none;
+    border-radius: map-get($ds-radii, xs);
+    transition: color 0.15s ease, background-color 0.15s ease;
+
+    svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    &:hover,
+    &.is-active {
+        color: var(--ds-accent);
+        background: var(--ds-accent-bg);
+    }
+}
+
+// Small "opens externally" badge overlaid on an icon button (currently
+// just the home/production-site link) — signals "leaves the DS, opens
+// in a new tab" up front, not only via the tooltip after hovering.
+// .topbar__icon-btn is already position: relative (every icon button
+// carries data-tooltip, see [data-tooltip] above) — the badge positions
+// against that same box, no extra wrapper rule needed.
+.topbar__icon-btn__badge {
+    position: absolute;
+    right: -3px;
+    bottom: -3px;
+    width: 12px;
+    height: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: var(--ds-bg-shell);
+    border: 1px solid var(--ds-border);
+    color: var(--ds-text-faint);
+    transition: color 0.15s ease, border-color 0.15s ease;
+
+    svg { width: 8px; height: 8px; }
+}
+
+.topbar__icon-btn--badged:hover .topbar__icon-btn__badge,
+.topbar__icon-btn--badged.is-active .topbar__icon-btn__badge {
+    color: var(--ds-accent);
+    border-color: var(--ds-accent);
+}
+
+// The generic [data-tooltip] below centers the tooltip on the trigger —
+// fine for icons with room on both sides, but the home icon sits close
+// to the topbar's right edge, so its (longer) tooltip text overflowed
+// the viewport. Anchor it to the icon's own right edge instead, same
+// fix as the DialKit trigger (see _dial-kit.scss).
+.topbar__icon-btn--badged[data-tooltip]::after {
+    left: auto;
+    right: 0;
+    transform: translate(0, -4px);
+}
+
+.topbar__icon-btn--badged[data-tooltip]:hover::after {
+    transform: translate(0, 0);
+}
+
+.topbar__profile-wrap {
+    position: relative;
+}
+
+// Small hover tooltip — used on the topbar/sidebar icon buttons
+// (data-tooltip="..." + aria-label, not the native title attribute,
+// which is slow to appear and unstyled). Generic on purpose (not
+// scoped to .topbar__icon-btn) so any element can opt in the same way.
+[data-tooltip] {
+    position: relative;
+}
+
+[data-tooltip]::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    top: calc(100% + #{map-get($ds-spacers, sm)});
+    left: 50%;
+    transform: translate(-50%, -4px);
+    background: $teal-700;
+    color: #fff;
+    font-family: var(--ds-font-family);
+    font-size: ds-ramp("text-xs", size);
+    line-height: ds-ramp("text-xs", line-height);
+    font-weight: 400;
+    white-space: nowrap;
+    padding: map-get($ds-spacers, xxs) map-get($ds-spacers, sm);
+    border-radius: map-get($ds-radii, xs);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s ease, transform 0.15s ease;
+    z-index: 60;
+}
+
+[data-tooltip]:hover::after {
+    opacity: 1;
+    transform: translate(-50%, 0);
+}

@@ -1,0 +1,112 @@
+// ==========================================================================
+// Nav/Sidebar — flat grouped structure (Foundations / Components / Patterns /
+// Pages · Templates), synced from Figma's Nav/Sidebar master (5377:2).
+//
+// The menu is long (30+ rows) so the sidebar scrolls internally with a thin
+// custom scrollbar, independent from the page content column.
+// ==========================================================================
+
+.sidebar {
+    flex: 0 0 280px;
+    width: 280px;
+    height: 100%;
+    min-height: 0;
+    border-right: 1px solid var(--ds-border);
+    overflow-y: auto;
+
+    // Thin grey scrollbar — WebKit/Blink.
+    &::-webkit-scrollbar {
+        width: 6px;
+    }
+    &::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    &::-webkit-scrollbar-thumb {
+        background-color: var(--ds-border-strong);
+        border-radius: map-get($ds-radii, full);
+    }
+
+    // Thin grey scrollbar — Firefox.
+    scrollbar-width: thin;
+    scrollbar-color: var(--ds-border-strong) transparent;
+}
+
+.sidebar__nav {
+    display: flex;
+    flex-direction: column;
+    padding: map-get($ds-spacers, "2xl") map-get($ds-spacers, xl) map-get($ds-spacers, "2xl") map-get($ds-spacers, lg);
+}
+
+.sidebar__section + .sidebar__section {
+    margin-top: map-get($ds-spacers, "3xl");
+}
+
+.sidebar__section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0 map-get($ds-spacers, lg);
+    height: 19px;
+    background: transparent;
+    border: none;
+    font-family: var(--ds-font-family);
+    font-size: 14px;
+    line-height: 19px;
+    font-weight: 600;
+    color: var(--ds-text-title);
+    cursor: pointer;
+}
+
+.sidebar__chevron {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 14px;
+    height: 7px;
+    color: var(--ds-text-muted);
+    flex: 0 0 auto;
+    transition: transform 0.15s ease;
+
+    &.is-collapsed {
+        transform: rotate(-90deg);
+    }
+}
+
+.sidebar__section-items {
+    display: flex;
+    flex-direction: column;
+    gap: map-get($ds-spacers, xs);
+    margin-top: map-get($ds-spacers, xs);
+}
+
+.sidebar__item {
+    display: flex;
+    align-items: center;
+    height: 34px;
+    padding: 0 map-get($ds-spacers, lg);
+    font-family: var(--ds-font-family);
+    font-size: ds-ramp("text-sm", size);
+    line-height: ds-ramp("text-sm", line-height);
+    font-weight: 400;
+    color: var(--ds-text-body);
+    text-decoration: none;
+    border-radius: map-get($ds-radii, sm);
+    transition: background-color 0.15s ease, color 0.15s ease;
+
+    &:hover {
+        background: var(--ds-bg-surface-hover);
+    }
+
+    &.is-active {
+        background: var(--ds-accent-bg);
+        color: var(--ds-accent);
+        font-weight: 600;
+    }
+
+    &.is-disabled {
+        color: var(--ds-text-faint);
+        pointer-events: none;
+        cursor: default;
+    }
+}

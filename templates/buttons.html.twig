@@ -1,0 +1,246 @@
+{% set currentPage = 'buttons' %}
+{% extends "base.html.twig" %}
+{% import "partials/_icons.html.twig" as icons %}
+
+{% block title %}Buttons — {{ parent() }}{% endblock %}
+
+{% macro stateButton(variant, label) %}
+    {% set cls = 'btn-ds btn-ds--' ~ variant %}
+    <button type="button" class="{{ cls }}">Default</button>
+    <button type="button" class="{{ cls }} is-hover">Hover</button>
+    <button type="button" class="{{ cls }} is-disabled" disabled>Disabled</button>
+    <button type="button" class="{{ cls }} is-loading">{{ _self.spinner() }} Loading</button>
+{% endmacro %}
+
+{% macro spinner() %}
+    <svg class="btn-ds__spinner" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 3a9 9 0 1 0 9 9"/></svg>
+{% endmacro %}
+
+{#
+    Single source of truth for the "Show code" samples below — built from
+    the SAME class pattern (and the SAME spinner markup, via _self.spinner())
+    that stateButton() actually renders above. Previously each of the 6
+    groups hand-typed its own generic Bootstrap-ish sample ("btn btn-primary",
+    "btn-outline-danger", <span class="spinner">...) that didn't match the
+    real btn-ds/btn-ds--variant markup at all, and drifted further out of
+    sync every time the component changed. Callers apply |e for the
+    HTML-escaped <pre><code> display and |e('js') for the Alpine `code:`
+    clipboard string — see the two call sites per group below.
+#}
+{% macro buttonCode(variant) %}<button type="button" class="btn-ds btn-ds--{{ variant }}">Default</button>
+<button type="button" class="btn-ds btn-ds--{{ variant }} is-disabled" disabled>Disabled</button>
+<button type="button" class="btn-ds btn-ds--{{ variant }} is-loading">
+  {{ _self.spinner() }} Loading
+</button>{% endmacro %}
+
+{% block content %}
+    {% include "partials/_page-header.html.twig" with {
+        title: 'Buttons',
+        subtitle: 'Mygtukai suaktyvina vieną veiksmą arba naršymo įvykį, o spalva ir šrifto svoris nurodo prioritetą — rinkitės Pirminį (Primary) svarbiausiam ekrano veiksmui, Antrinį (Secondary) papildomiems veiksmams, Naikinantį (Destructive) veiksmams, kurie ištrina ar pašalina duomenis, ir Nuorodą (Link) mažo akcento veiksmams tekste.',
+    } %}
+
+    <section class="ds-section">
+        <h2 class="ds-section__title">Variants &amp; States</h2>
+
+        {# Primary — the only variant with the real "Show code" interaction. #}
+        <div class="ds-group" x-data="{
+                expanded: false,
+                copied: false,
+                code: '{{ ('' ~ _self.buttonCode('primary'))|e('js') }}',
+                copyCode() {
+                    navigator.clipboard.writeText(this.code).catch(() => {});
+                    this.copied = true;
+                    setTimeout(() => { this.copied = false; }, 2200);
+                }
+            }">
+            <div class="ds-group__label">Primary</div>
+            <div class="ds-group__row">
+                {{ _self.stateButton('primary', 'Primary') }}
+                <button type="button" class="show-code-toggle" x-show="$store.devTools.showCode"
+                        @click="expanded = !expanded; if (expanded) $nextTick(() => Prism.highlightAllUnder($el.closest('.ds-group')))">
+                    <span x-show="!expanded" x-transition.opacity.duration.150ms>{{ icons.icon('code', 16) }} Kodas</span>
+                    <span x-show="expanded" x-transition.opacity.duration.150ms x-cloak>{{ icons.icon('x', 16) }}</span>
+                </button>
+            </div>
+
+            <div class="code-panel" x-show="expanded && $store.devTools.showCode" x-collapse x-cloak>
+                <div class="code-panel__header">
+                    <button type="button" class="code-panel__copy" @click="copyCode()" :title="copied ? 'Nukopijuota' : 'Kopijuoti kodą'">
+                        <span x-show="!copied" x-transition.opacity.duration.150ms>{{ icons.icon('copy', 14) }}</span>
+                        <span x-show="copied" x-transition.opacity.duration.150ms x-cloak>{{ icons.icon('check', 14) }}</span>
+                    </button>
+                </div>
+                <div class="code-panel__body">
+                    <pre class="code-panel__code line-numbers"><code class="language-markup">{{ ('' ~ _self.buttonCode('primary'))|e }}</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="ds-group" x-data="{
+                expanded: false,
+                copied: false,
+                code: '{{ ('' ~ _self.buttonCode('secondary'))|e('js') }}',
+                copyCode() {
+                    navigator.clipboard.writeText(this.code).catch(() => {});
+                    this.copied = true;
+                    setTimeout(() => { this.copied = false; }, 2200);
+                }
+            }">
+            <div class="ds-group__label">Secondary</div>
+            <div class="ds-group__row">
+                {{ _self.stateButton('secondary', 'Secondary') }}
+                <button type="button" class="show-code-toggle" x-show="$store.devTools.showCode"
+                        @click="expanded = !expanded; if (expanded) $nextTick(() => Prism.highlightAllUnder($el.closest('.ds-group')))">
+                    <span x-show="!expanded" x-transition.opacity.duration.150ms>{{ icons.icon('code', 16) }} Kodas</span>
+                    <span x-show="expanded" x-transition.opacity.duration.150ms x-cloak>{{ icons.icon('x', 16) }}</span>
+                </button>
+            </div>
+
+            <div class="code-panel" x-show="expanded && $store.devTools.showCode" x-collapse x-cloak>
+                <div class="code-panel__header">
+                    <button type="button" class="code-panel__copy" @click="copyCode()" :title="copied ? 'Nukopijuota' : 'Kopijuoti kodą'">
+                        <span x-show="!copied" x-transition.opacity.duration.150ms>{{ icons.icon('copy', 14) }}</span>
+                        <span x-show="copied" x-transition.opacity.duration.150ms x-cloak>{{ icons.icon('check', 14) }}</span>
+                    </button>
+                </div>
+                <div class="code-panel__body">
+                    <pre class="code-panel__code line-numbers"><code class="language-markup">{{ ('' ~ _self.buttonCode('secondary'))|e }}</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="ds-group" x-data="{
+                expanded: false,
+                copied: false,
+                code: '{{ ('' ~ _self.buttonCode('tertiary'))|e('js') }}',
+                copyCode() {
+                    navigator.clipboard.writeText(this.code).catch(() => {});
+                    this.copied = true;
+                    setTimeout(() => { this.copied = false; }, 2200);
+                }
+            }">
+            <div class="ds-group__label">Tertiary</div>
+            <div class="ds-group__row">
+                {{ _self.stateButton('tertiary', 'Tertiary') }}
+                <button type="button" class="show-code-toggle" x-show="$store.devTools.showCode"
+                        @click="expanded = !expanded; if (expanded) $nextTick(() => Prism.highlightAllUnder($el.closest('.ds-group')))">
+                    <span x-show="!expanded" x-transition.opacity.duration.150ms>{{ icons.icon('code', 16) }} Kodas</span>
+                    <span x-show="expanded" x-transition.opacity.duration.150ms x-cloak>{{ icons.icon('x', 16) }}</span>
+                </button>
+            </div>
+
+            <div class="code-panel" x-show="expanded && $store.devTools.showCode" x-collapse x-cloak>
+                <div class="code-panel__header">
+                    <button type="button" class="code-panel__copy" @click="copyCode()" :title="copied ? 'Nukopijuota' : 'Kopijuoti kodą'">
+                        <span x-show="!copied" x-transition.opacity.duration.150ms>{{ icons.icon('copy', 14) }}</span>
+                        <span x-show="copied" x-transition.opacity.duration.150ms x-cloak>{{ icons.icon('check', 14) }}</span>
+                    </button>
+                </div>
+                <div class="code-panel__body">
+                    <pre class="code-panel__code line-numbers"><code class="language-markup">{{ ('' ~ _self.buttonCode('tertiary'))|e }}</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="ds-group" x-data="{
+                expanded: false,
+                copied: false,
+                code: '{{ ('' ~ _self.buttonCode('destructive'))|e('js') }}',
+                copyCode() {
+                    navigator.clipboard.writeText(this.code).catch(() => {});
+                    this.copied = true;
+                    setTimeout(() => { this.copied = false; }, 2200);
+                }
+            }">
+            <div class="ds-group__label">Destructive &middot; Primary</div>
+            <div class="ds-group__row">
+                {{ _self.stateButton('destructive', 'Destructive') }}
+                <button type="button" class="show-code-toggle" x-show="$store.devTools.showCode"
+                        @click="expanded = !expanded; if (expanded) $nextTick(() => Prism.highlightAllUnder($el.closest('.ds-group')))">
+                    <span x-show="!expanded" x-transition.opacity.duration.150ms>{{ icons.icon('code', 16) }} Kodas</span>
+                    <span x-show="expanded" x-transition.opacity.duration.150ms x-cloak>{{ icons.icon('x', 16) }}</span>
+                </button>
+            </div>
+
+            <div class="code-panel" x-show="expanded && $store.devTools.showCode" x-collapse x-cloak>
+                <div class="code-panel__header">
+                    <button type="button" class="code-panel__copy" @click="copyCode()" :title="copied ? 'Nukopijuota' : 'Kopijuoti kodą'">
+                        <span x-show="!copied" x-transition.opacity.duration.150ms>{{ icons.icon('copy', 14) }}</span>
+                        <span x-show="copied" x-transition.opacity.duration.150ms x-cloak>{{ icons.icon('check', 14) }}</span>
+                    </button>
+                </div>
+                <div class="code-panel__body">
+                    <pre class="code-panel__code line-numbers"><code class="language-markup">{{ ('' ~ _self.buttonCode('destructive'))|e }}</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="ds-group" x-data="{
+                expanded: false,
+                copied: false,
+                code: '{{ ('' ~ _self.buttonCode('destructive-secondary'))|e('js') }}',
+                copyCode() {
+                    navigator.clipboard.writeText(this.code).catch(() => {});
+                    this.copied = true;
+                    setTimeout(() => { this.copied = false; }, 2200);
+                }
+            }">
+            <div class="ds-group__label">Destructive &middot; Secondary</div>
+            <div class="ds-group__row">
+                {{ _self.stateButton('destructive-secondary', 'Destructive Secondary') }}
+                <button type="button" class="show-code-toggle" x-show="$store.devTools.showCode"
+                        @click="expanded = !expanded; if (expanded) $nextTick(() => Prism.highlightAllUnder($el.closest('.ds-group')))">
+                    <span x-show="!expanded" x-transition.opacity.duration.150ms>{{ icons.icon('code', 16) }} Kodas</span>
+                    <span x-show="expanded" x-transition.opacity.duration.150ms x-cloak>{{ icons.icon('x', 16) }}</span>
+                </button>
+            </div>
+
+            <div class="code-panel" x-show="expanded && $store.devTools.showCode" x-collapse x-cloak>
+                <div class="code-panel__header">
+                    <button type="button" class="code-panel__copy" @click="copyCode()" :title="copied ? 'Nukopijuota' : 'Kopijuoti kodą'">
+                        <span x-show="!copied" x-transition.opacity.duration.150ms>{{ icons.icon('copy', 14) }}</span>
+                        <span x-show="copied" x-transition.opacity.duration.150ms x-cloak>{{ icons.icon('check', 14) }}</span>
+                    </button>
+                </div>
+                <div class="code-panel__body">
+                    <pre class="code-panel__code line-numbers"><code class="language-markup">{{ ('' ~ _self.buttonCode('destructive-secondary'))|e }}</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <div class="ds-group" x-data="{
+                expanded: false,
+                copied: false,
+                code: '{{ ('' ~ _self.buttonCode('link'))|e('js') }}',
+                copyCode() {
+                    navigator.clipboard.writeText(this.code).catch(() => {});
+                    this.copied = true;
+                    setTimeout(() => { this.copied = false; }, 2200);
+                }
+            }">
+            <div class="ds-group__label">Link</div>
+            <div class="ds-group__row">
+                {{ _self.stateButton('link', 'Link') }}
+                <button type="button" class="show-code-toggle" x-show="$store.devTools.showCode"
+                        @click="expanded = !expanded; if (expanded) $nextTick(() => Prism.highlightAllUnder($el.closest('.ds-group')))">
+                    <span x-show="!expanded" x-transition.opacity.duration.150ms>{{ icons.icon('code', 16) }} Kodas</span>
+                    <span x-show="expanded" x-transition.opacity.duration.150ms x-cloak>{{ icons.icon('x', 16) }}</span>
+                </button>
+            </div>
+
+            <div class="code-panel" x-show="expanded && $store.devTools.showCode" x-collapse x-cloak>
+                <div class="code-panel__header">
+                    <button type="button" class="code-panel__copy" @click="copyCode()" :title="copied ? 'Nukopijuota' : 'Kopijuoti kodą'">
+                        <span x-show="!copied" x-transition.opacity.duration.150ms>{{ icons.icon('copy', 14) }}</span>
+                        <span x-show="copied" x-transition.opacity.duration.150ms x-cloak>{{ icons.icon('check', 14) }}</span>
+                    </button>
+                </div>
+                <div class="code-panel__body">
+                    <pre class="code-panel__code line-numbers"><code class="language-markup">{{ ('' ~ _self.buttonCode('link'))|e }}</code></pre>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <a href="#" class="ds-figma-link">{{ icons.icon('external-link', 14) }} Figmoje</a>
+{% endblock %}

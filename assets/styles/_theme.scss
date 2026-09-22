@@ -1,0 +1,66 @@
+// ==========================================================================
+// Semantic theme tokens (CSS custom properties)
+//
+// A layer on top of the raw $grey-*/$teal-*/etc. palette in _variables.scss
+// — components reference var(--ds-bg-page) etc. instead of a literal SCSS
+// color, so a theme can remap what those roles mean without touching every
+// component file. Kept general on purpose: worth having regardless of a
+// second theme specifically, since "what background does a card sit on"
+// is a question every component asks and hardcoding the light answer
+// everywhere would make adding one later this invasive.
+//
+// Not exhaustive — covers shell chrome, generic surfaces (cards, group
+// boxes, code panels), borders, and text roles, since those are shared by
+// nearly every page. Component-specific brand colors (button fills, badge
+// colors, swatch colors) are deliberately NOT tokenized here — they're
+// brand-colored either way, dark or light, same as most products' dark
+// modes still show colorful primary buttons.
+// ==========================================================================
+
+:root {
+    --ds-bg-page: #{$teal-200};
+    --ds-bg-shell: #{$body-bg};
+    --ds-bg-surface: #{$grey-100};
+    --ds-bg-surface-hover: #{$grey-200};
+    --ds-border: #{$grey-200};
+    --ds-border-strong: #{$grey-300};
+    --ds-text-title: #{$grey-800};
+    --ds-text-body: #{$grey-800};
+    --ds-text-muted: #{$grey-600};
+    --ds-text-faint: #{$grey-400};
+    // Interactive teal accent (hover/active text + its background wash)
+    // — kept separate from the brand $teal-* scale used directly for
+    // buttons/badges/swatches, because a teal tuned for contrast against
+    // white (teal-700 text, teal-100 wash) doesn't carry over to a dark
+    // surface: dark-on-dark text and a near-white hover wash would both
+    // misbehave there. See the dark override below.
+    --ds-accent: #{$teal-700};
+    --ds-accent-bg: #{$teal-100};
+    // Wellcome hero — its own dedicated tokens rather than reusing the
+    // generic surface/text ones, since the hero is a deliberately
+    // brand-colored banner (see _wellcome.scss's own notes on #005a5a
+    // being a one-off, not a token oversight), not a neutral surface.
+    --ds-hero-bg: #{$teal-100};
+    --ds-hero-text: #005a5a;
+    --ds-hero-grid: rgba(#{$teal-700}, 0.08);
+
+    // Live-switchable via the DialKit "Šriftas" picker (window.dsSetFont()
+    // in app.js) — every explicit `font-family: $font-family-sans-serif`
+    // in the DS-admin partials was swapped for var(--ds-font-family) so a
+    // pick actually reaches the whole shell, not just body-inherited text.
+    --ds-font-family: #{$font-family-sans-serif};
+    // Bootstrap 5.3 emits its OWN font custom properties and its
+    // components (buttons, form controls, etc.) reference those, not our
+    // SCSS variable — repointing them here means Bootstrap-native
+    // elements pick up a font change too, without hunting down every
+    // Bootstrap component that sets its own font-family.
+    --bs-body-font-family: var(--ds-font-family);
+    --bs-font-sans-serif: var(--ds-font-family);
+
+    // Same idea, for the one deliberate serif accent (see the
+    // .hero-ds__title comment in _wellcome.scss) — a separate token so
+    // switching the site-wide sans pick above never touches this, and
+    // vice versa. Live-switchable via the DialKit "Serifinis šriftas"
+    // picker (window.dsSetFontSerif() in app.js).
+    --ds-font-family-serif: "Enriqueta", serif;
+}

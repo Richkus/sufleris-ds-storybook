@@ -1,0 +1,11 @@
+{% set currentPage = 'spacing' %}
+{% extends "base.html.twig" %}
+
+{% block title %}Spacing — {{ parent() }}{% endblock %}
+
+{% block content %}
+    {% include "partials/_page-header.html.twig" with {
+        title: 'Spacing',
+        subtitle: 'Tarpų ir kampų suapvalinimo skalė, užtikrinanti nuoseklų layout\'ą.',
+    } %}
+{% endblock %}

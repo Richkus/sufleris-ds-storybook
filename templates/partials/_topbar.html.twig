@@ -1,0 +1,43 @@
+{% import "partials/_icons.html.twig" as icons %}
+
+<header class="topbar" x-data="{ profileOpen: false }">
+    <a href="index.html" class="topbar__wordmark">
+        <span class="topbar__wordmark-brand">Sufleris</span>
+        <span class="topbar__wordmark-sub">DS.V.3</span>
+    </a>
+
+    <div class="topbar__actions">
+        <a href="admin.html" class="topbar__icon-btn" data-tooltip="MS Admin" aria-label="MS Admin">{{ icons.icon('dashboard', 20) }}</a>
+        {#
+            target="_blank" — leaves the DS entirely for the real
+            production site, so it should open in a new tab rather than
+            navigate away from here. The small arrow-up-right badge on
+            the home icon signals that before the click, not just via
+            the tooltip.
+        #}
+        <a href="https://www.mokesciu-sufleris.lt/" target="_blank" rel="noopener noreferrer" class="topbar__icon-btn topbar__icon-btn--badged" data-tooltip="Mokesčių Sufleris (naujame lange)" aria-label="Mokesčių Sufleris (atsidaro naujame lange)">
+            {{ icons.icon('home', 20) }}
+            <span class="topbar__icon-btn__badge">{{ icons.icon('arrow-up-right', 8) }}</span>
+        </a>
+
+        <div class="topbar__profile-wrap">
+            {# :data-tooltip so it disappears the instant the dropdown
+               opens instead of lingering while the mouse is still over
+               the button — same pattern as the DialKit trigger, see
+               _dial-kit.html.twig. #}
+            <button type="button" class="topbar__icon-btn" :class="{ 'is-active': profileOpen }" @click="profileOpen = !profileOpen" :data-tooltip="profileOpen ? false : 'Profilis'" aria-label="Profilis">
+                {{ icons.icon('user-circle', 20) }}
+            </button>
+
+            {# Alpine's transition *modifier* shorthand (.opacity.scale.duration)
+               generates the CSS itself — unlike the old longhand version here,
+               which referenced "transition ease-out duration-150" as if those
+               were real utility classes; Bootstrap doesn't define them, so
+               that transition was silently a no-op (instant snap). #}
+            <div x-show="profileOpen" x-cloak @click.outside="profileOpen = false"
+                 x-transition.opacity.scale.95.duration.150ms>
+                {% include "partials/_profile-dropdown.html.twig" %}
+            </div>
+        </div>
+    </div>
+</header>

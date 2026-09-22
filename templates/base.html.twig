@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="lt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Mokesčių Sufleris — DS Admin{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    {# Enriqueta is the Wellcome hero headline's (index.html) serif
+       accent, distinct from the site-wide Open Sans — Libre Baskerville
+       is its DialKit-picker alternative ("Serifinis šriftas" group).
+       DM Sans/Inter/Roboto are the sans "Šriftas" picker's other options
+       (see _dial-kit.html.twig, window.dsSetFont()/dsSetFontSerif() in
+       app.js) — everything loaded upfront so picking one is instant, no
+       per-pick <link> injection/FOUC to manage. #}
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&family=Enriqueta:wght@600;700&family=Inter:wght@400;600;700&family=Libre+Baskerville:wght@400;700&family=Open+Sans:ital,wght@0,400;0,600;0,700;1,400&family=Roboto:wght@400;600;700&family=Roboto+Mono:wght@400&display=swap" rel="stylesheet">
+    {% block stylesheets %}
+        <link rel="stylesheet" href="build/app.css">
+    {% endblock %}
+    {#
+        Flash-prevention for the saved font pick (window.dsSetFont() in
+        app.js, DialKit "Šriftas"/"Serifinis šriftas" groups) — sets the
+        --ds-font-family/--ds-font-family-serif custom properties here,
+        before first paint, rather than waiting for app.js. Must run
+        synchronously in <head>, before body/CSS render. The font-stack
+        maps are duplicated from app.js's DS_FONTS/DS_SERIF_FONTS on
+        purpose: this has to run pre-paint, before any module script is
+        available.
+    #}
+    <script>
+        (function () {
+            try {
+                var fontStacks = {
+                    'open-sans': '"Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif',
+                    'dm-sans': '"DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif',
+                    'inter': '"Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif',
+                    'roboto': '"Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif'
+                };
+                var font = localStorage.getItem('ds-font');
+                if (font && fontStacks[font]) {
+                    document.documentElement.style.setProperty('--ds-font-family', fontStacks[font]);
+                }
+            } catch (e) {}
+            try {
+                var serifStacks = {
+                    'enriqueta': '"Enriqueta", serif',
+                    'libre-baskerville': '"Libre Baskerville", serif'
+                };
+                var serifFont = localStorage.getItem('ds-font-serif');
+                if (serifFont && serifStacks[serifFont]) {
+                    document.documentElement.style.setProperty('--ds-font-family-serif', serifStacks[serifFont]);
+                }
+            } catch (e) {}
+        })();
+    </script>
+</head>
+<body>
+    {% set isBare = bare is defined and bare %}
+    <div class="app-page {{ isBare ? 'app-page--bare' }}">
+        <div class="app-shell">
+            {% if not isBare %}
+                {% include "partials/_topbar.html.twig" %}
+            {% endif %}
+            <div class="app-shell__body">
+                {% if not isBare %}
+                    {% include "partials/_sidebar.html.twig" %}
+                {% endif %}
+                {# .app-content is the SCROLL container — always full width next
+                   to the sidebar, so the scrollbar/wheel works no matter where
+                   the cursor is over the pane (not just over the narrower
+                   centered column). .app-content__inner carries the actual
+                   820px content-column width/centering; it's a separate
+                   element specifically so the two concerns (scroll region vs.
+                   content width) don't fight each other. #}
+                {% if isBare %}
+                    <main class="app-content app-content--bare">
+                        {% block content %}{% endblock %}
+                    </main>
+                {% else %}
+                    <main class="app-content">
+                        <div class="app-content__inner {{ contentClass|default('') }}">
+                            {{ block('content') }}
+                            {% if not (hideFooter is defined and hideFooter) %}
+                                {% include "partials/_footer.html.twig" %}
+                            {% endif %}
+                        </div>
+                    </main>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    {% include "partials/_toast-stack.html.twig" %}
+    {% include "partials/_dial-kit.html.twig" %}
+
+    {% block javascripts %}
+        {# Encore's enableSingleRuntimeChunk() splits the webpack runtime
+           into its own file — it MUST load before app.js or the module
+           system silently no-ops (Alpine never initializes). #}
+        <script src="build/runtime.js"></script>
+        <script src="build/app.js"></script>
+    {% endblock %}
+</body>
+</html>

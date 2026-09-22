@@ -1,0 +1,159 @@
+{% import "partials/_icons.html.twig" as icons %}
+{#
+    A small always-on-screen "live controls" widget (fixed, bottom-right)
+    — one place to hold whatever live-tunable parameters this prototype
+    needs, rather than scattering each one into whatever chrome it
+    happens to affect. That's what the layout switcher used to be: an
+    icon in the topbar, awkwardly duplicated into the sidebar for V.2's
+    topbar-less layout. This replaces both.
+
+    Only one control group for now (Layoutas). Add more
+    <div class="dial-kit__group"> blocks here as more live-tunable
+    things come up — it's built to hold more, not just this one.
+
+    Included once in base.html.twig (outside the isBare check, so it's
+    available on admin.html too), not per-shell like the old switcher —
+    it's fixed-positioned and independent of the topbar/sidebar chrome,
+    so it doesn't need a shell-specific duplicate.
+#}
+<div class="dial-kit" x-data="{
+        open: false,
+        showOnboarding: false,
+        initOnboarding() {
+            try {
+                if (!localStorage.getItem('ds-onboarding-seen')) {
+                    setTimeout(() => { this.showOnboarding = true; }, 700);
+                }
+            } catch (e) {}
+        },
+        dismissOnboarding() {
+            this.showOnboarding = false;
+            try { localStorage.setItem('ds-onboarding-seen', '1'); } catch (e) {}
+        }
+    }"
+    x-init="initOnboarding()"
+>
+    {#
+        First-visit-only coachmark pointing at the trigger below — "you
+        can tweak things here if you need to". Shown once ever (per
+        browser, via localStorage 'ds-onboarding-seen'); dismissing it
+        (X), clicking outside it, OR opening the trigger itself all mark
+        it seen, so it never reappears once the widget's been discovered
+        any of those ways.
+    #}
+    <div x-show="showOnboarding" x-cloak @click.outside="if (showOnboarding) dismissOnboarding()"
+         x-transition:enter.opacity.scale.90.duration.400ms.delay.120ms
+         x-transition:leave.opacity.scale.95.duration.200ms
+         class="dial-kit__coachmark">
+        <button type="button" class="dial-kit__coachmark-close" @click="dismissOnboarding()" aria-label="Uždaryti">
+            {{ icons.icon('x', 12) }}
+        </button>
+        <img src="build/images/onboarding-avatar.png" alt="" class="dial-kit__coachmark-avatar">
+        <p class="dial-kit__coachmark-text">Čia gali pamodifikuoti dalykus, jei prireiks</p>
+    </div>
+
+    <div x-show="open" x-cloak @click.outside="open = false"
+         x-transition.opacity.scale.95.duration.150ms class="dial-kit__panel">
+
+        {#
+            Font pickers — a growing list of .dial-kit__option buttons
+            per font (the old approach) doesn't scale: it was already 4
+            rows for sans, and every new serif option (now 3) added more
+            of the same. A dropdown is the standard pattern here — one
+            compact row regardless of how many faces are offered (this
+            is how Figma's own font picker works too) — so both groups
+            render as a single <select> instead.
+
+            Swaps --ds-font-family / --ds-font-family-serif live (see
+            window.dsSetFont()/dsSetFontSerif() in app.js and
+            _theme.scss for how the sans one also repoints Bootstrap's
+            own font vars). Sizes are untouched either way — every
+            option still uses the same $ds-type-ramp values, only the
+            typeface changes.
+
+            Each <option> carries its own font-family so the OPEN
+            dropdown previews every face; the select's :style binding
+            (looked up from window.DS_FONTS/DS_SERIF_FONTS, exposed by
+            app.js) previews the CURRENT pick even while closed.
+        #}
+        <div class="dial-kit__group">
+            <div class="dial-kit__group-label">Šriftas</div>
+            <div class="dial-kit__select-wrap">
+                <select class="dial-kit__select" :style="{ fontFamily: window.DS_FONTS[$store.font.current].stack }"
+                        @change="window.dsSetFont($event.target.value)">
+                    {% for key, label in { 'open-sans': 'Open Sans', 'dm-sans': 'DM Sans', 'inter': 'Inter', 'roboto': 'Roboto' } %}
+                        <option value="{{ key }}" :selected="$store.font.current === '{{ key }}'" style="font-family: '{{ label }}', sans-serif">{{ label }}</option>
+                    {% endfor %}
+                </select>
+                {{ icons.icon('chevron-down', 14) }}
+            </div>
+        </div>
+
+        <div class="dial-kit__divider"></div>
+
+        {#
+            The site has exactly one deliberate serif usage — the
+            Wellcome hero headline (.hero-ds__title, index.html) — so
+            this is its own small picker, separate from the sans
+            "Šriftas" group above.
+        #}
+        <div class="dial-kit__group">
+            <div class="dial-kit__group-label">Serifinis šriftas</div>
+            <div class="dial-kit__select-wrap">
+                <select class="dial-kit__select" :style="{ fontFamily: window.DS_SERIF_FONTS[$store.fontSerif.current].stack }"
+                        @change="window.dsSetFontSerif($event.target.value)">
+                    {% for key, label in { 'enriqueta': 'Enriqueta', 'libre-baskerville': 'Libre Baskerville' } %}
+                        <option value="{{ key }}" :selected="$store.fontSerif.current === '{{ key }}'" style="font-family: '{{ label }}', serif">{{ label }}</option>
+                    {% endfor %}
+                </select>
+                {{ icons.icon('chevron-down', 14) }}
+            </div>
+        </div>
+
+        <div class="dial-kit__divider"></div>
+
+        {#
+            Global "show code" switch — hides the per-component "Kodas"
+            toggle + code panel everywhere (all pages/shells), not just
+            collapses it. See window.dsSetShowCode / $store.devTools in
+            app.js and the x-show bindings in buttons.html.twig.
+        #}
+        <div class="dial-kit__group">
+            <div class="dial-kit__group-label">Kodas</div>
+            <button type="button" class="dial-kit__toggle-row" @click="window.dsSetShowCode(!$store.devTools.showCode)">
+                <span>Rodyti kodą</span>
+                <span class="dial-kit__eye">
+                    <span x-show="$store.devTools.showCode">{{ icons.icon('eye', 16) }}</span>
+                    <span x-show="!$store.devTools.showCode" x-cloak>{{ icons.icon('eye-off', 16) }}</span>
+                </span>
+            </button>
+        </div>
+
+        <div class="dial-kit__divider"></div>
+
+        {#
+            Onboarding only ever shows once (per browser) on its own, so
+            there's no normal way to re-look at a change made to it short
+            of clearing localStorage by hand — this re-triggers it
+            on-demand, for previewing/iterating on it, without touching
+            the "seen" flag that governs the real first-visit behavior.
+        #}
+        <div class="dial-kit__group">
+            <div class="dial-kit__group-label">Onboarding</div>
+            <button type="button" class="dial-kit__toggle-row" @click="open = false; showOnboarding = true">
+                <span>Peržiūrėti pranešimą</span>
+                <span class="dial-kit__eye">{{ icons.icon('eye', 16) }}</span>
+            </button>
+        </div>
+    </div>
+
+    {# A playful emoji instead of a stroke-icon on purpose — this trigger
+       opens a meta/dev-tools widget, not a real product surface, and the
+       emoji signals that at a glance instead of blending in with the
+       DS's own serious icon language. #}
+    <button type="button" class="dial-kit__trigger" :class="{ 'is-active': open }"
+            @click="open = !open; if (showOnboarding) dismissOnboarding()"
+            :data-tooltip="open ? false : 'Pareguliavimai :)'" aria-label="Pareguliavimai">
+        <span class="dial-kit__trigger-emoji">🪄</span>
+    </button>
+</div>
