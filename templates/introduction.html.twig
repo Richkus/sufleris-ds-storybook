@@ -6,7 +6,7 @@
 {% block content %}
     {% include "partials/_page-header.html.twig" with {
         title: 'Introduction',
-        subtitle: 'Principai, kuriais remiamės kurdami kiekvieną naują MS-DS komponentą.',
+        subtitle: 'Principai, kuriais remiamės kurdami kiekvieną naują MS-DS (Mokesčių SUFLERIO dizaino sistemos) komponentą.',
         pill: { label: 'Draftas', variant: 'draft' },
         hideDivider: true,
     } %}
@@ -18,8 +18,8 @@
     <div class="ds-group mb-ds-4xl">
         <p class="mb-0">
             MS Storybook kol kas dar MVP, pirma šitų principų versija, kad
-            turėtume nuo ko atsispirti. Tiksliname kartu, komandoje, nieko
-            čia dar iškalto akmenyje.
+            turėtume nuo ko atsispirti. Tikslinsim kartu, komandoj, nieko
+            čia dar iškalto akmeny.
         </p>
     </div>
 
@@ -30,7 +30,7 @@
                 MS-DS nėra koks atskiras Figma projektas, kurį vėliau kažkas
                 „išverčia“ į kodą. Čia realus, veikiantis kodas: tas pats
                 stack'as (Twig + SCSS/Bootstrap 5 + Alpine.js), kuriuo
-                galiausiai suksis ir pats produktas. Tikslas paprastas:
+                suksis ir pats produktas. Tikslas paprastas:
                 kad komponentus būtų galima persimesti į tikrą Symfony/Twig
                 backend'ą beveik nieko nekeičiant, o ne perrašinėti iš naujo.
             </p>
@@ -53,7 +53,7 @@
                 </li>
                 <li>
                     <strong>Bootstrap kaip pamatas, ne kaip galutinis sprendimas.</strong>
-                    Bootstrap 5 grid'as ir baziniai elementai yra apačioje,
+                    Bootstrap 5 grid'as ir baziniai elementai yra apačioj,
                     bet viską apvelkam savais, semantiniais pavadinimais (pvz.
                     <code>.btn-ds</code>, <code>.sidebar__item</code>), kad
                     MS-DS neliktų prilipęs prie konkrečios Bootstrap versijos
@@ -67,12 +67,12 @@
                 </li>
                 <li>
                     <strong>Figma ir kodas yra vienas šaltinis, ne du.</strong> Naujas
-                    komponentas pirma turi atsirasti Figma DS byloje; spalvas,
+                    komponentas pirma turi atsirasti Figma DS byloj; spalvas,
                     tarpus, šriftus imam iš ten (per <code>get_design_context</code>),
                     ne „iš akies“.
                 </li>
                 <li>
-                    <strong>Show code turi rodyti tiesą.</strong> Jei puslapyje
+                    <strong>Show code turi rodyti tiesą.</strong> Jei puslapy
                     rodom kodo pavyzdį, jis turi ateiti iš to paties šaltinio,
                     kuris renderina patį komponentą, o ne būti atskirai ranka
                     surašytas tekstas, kuris anksčiau ar vėliau nusiskirs nuo
@@ -84,7 +84,7 @@
         <section class="ds-section">
             <h2 class="ds-section__title">Kada kuriame naują komponentą</h2>
             <ul>
-                <li>Pirma patikrinam, ar komponentas jau yra Figma DS byloje, kad nekurtume dublikato.</li>
+                <li>Pirma patikrinam, ar komponentas jau yra Figma DS byloj, kad nekurtume dublikato.</li>
                 <li>Naudojam esamus tarpų, spalvų, šriftų, radius tokenus; nauja reikšmė tik po pasitarimo.</li>
                 <li>Vienas <code>.scss</code> partial'as vienam komponentui, importuotas į <code>main.scss</code> (tvarka faile ten svarbi).</li>
                 <li>Kas naudojama pakartotinai, keliauja į atskirą Twig partial'ą (<code>templates/partials/</code>), ne kopijuojasi po kiekvieną puslapį.</li>
