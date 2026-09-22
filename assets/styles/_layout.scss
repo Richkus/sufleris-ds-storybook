@@ -5,7 +5,6 @@
 .app-page {
     height: 100vh;
     background: var(--ds-bg-page);
-    padding: map-get($ds-spacers, lg);
     display: flex;
 }
 
@@ -15,10 +14,7 @@
     flex: 1 1 auto;
     min-width: 0;
     background: var(--ds-bg-shell);
-    border: 1px solid var(--ds-border);
-    border-radius: map-get($ds-radii, xl);
     overflow: hidden;
-    box-shadow: 0 1px 2px rgba($grey-900, 0.04);
     height: 100%;
 }
 
@@ -68,12 +64,8 @@
 .app-page--bare {
     align-items: center;
     justify-content: center;
-    padding: 0;
 
     .app-shell {
-        border: none;
-        border-radius: 0;
-        box-shadow: none;
         height: 100vh;
         width: 100%;
     }
