@@ -112,6 +112,20 @@
     opacity: 0.45;
 }
 
+// A diagram/illustration dropped into a .ds-group box (e.g. Introduction's
+// stack diagram) — capped and centered rather than stretched edge to edge,
+// so it reads as an illustration sitting inside the card, not a banner
+// filling it.
+.ds-diagram-img {
+    // width: 100% (not img-fluid's own max-width: 100%) so this always
+    // wins over the cap below on narrow containers — two competing
+    // max-widths would otherwise pick whichever rule happens to come
+    // later in the stylesheet, not the smaller of the two.
+    width: 100%;
+    max-width: 480px;
+    margin: 0 auto;
+}
+
 // Text-heavy documentation pages (Introduction and any future prose page)
 // — Bootstrap's own p/ul defaults are close enough, this just adds the
 // vertical rhythm between them and a brand-neutral inline <code> style
