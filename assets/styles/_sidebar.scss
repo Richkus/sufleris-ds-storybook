@@ -46,7 +46,10 @@
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    padding: 0 map-get($ds-spacers, lg);
+    // Right padding is smaller than the left (lg, matching the items'
+    // own indent below) — pulls the chevron in closer to the sidebar's
+    // right border instead of matching the left inset symmetrically.
+    padding: 0 map-get($ds-spacers, sm) 0 map-get($ds-spacers, lg);
     height: 19px;
     background: transparent;
     border: none;
@@ -95,7 +98,7 @@
     transition: background-color 0.15s ease, color 0.15s ease;
 
     &:hover {
-        background: var(--ds-bg-surface-hover);
+        background: var(--ds-accent-bg);
     }
 
     &.is-active {
