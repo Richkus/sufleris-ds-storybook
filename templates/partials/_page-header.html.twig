@@ -6,9 +6,14 @@
         title: 'Buttons',
         subtitle: 'Mygtukai suaktyvina...',
         pill: { label: 'Production', variant: 'production' },
+        hideDivider: true,
     } %}
 
     `pill` is optional; `variant` is one of production|basic|missing.
+    `hideDivider` is optional (default false) — set true when the caller
+    puts its own block (e.g. a bordered image) directly under the
+    subtitle instead of the divider, so there isn't a divider sitting
+    right above that block too.
 #}
 <div class="ds-page__header">
     <div class="ds-page__title-row">
@@ -19,4 +24,6 @@
     </div>
     <p class="ds-page__subtitle mb-0">{{ subtitle }}</p>
 </div>
-<hr class="ds-page__divider">
+{% if not (hideDivider is defined and hideDivider) %}
+    <hr class="ds-page__divider">
+{% endif %}
