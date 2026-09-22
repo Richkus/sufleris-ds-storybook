@@ -4,37 +4,80 @@
 
 {% block title %}Modal — {{ parent() }}{% endblock %}
 
+{#
+    Single source of truth for both the live demo and the "Show code"
+    sample below — modalDemoHtml is rendered once, into the preview
+    frame, and reused (escaped) for the code panel, so the two can never
+    drift apart. Same reasoning as buttonCode() in buttons.html.twig.
+#}
+{% macro modalDemo() %}
+    <div x-data="{ open: false }">
+        <button type="button" class="btn-ds btn-ds--primary" @click="open = true">Atidaryti modalą</button>
+
+        <div class="modal-ds__backdrop" x-show="open" x-cloak @click.self="open = false" @keydown.escape.window="open = false" x-transition.opacity.duration.150ms>
+            <div class="modal-ds__dialog" role="dialog" aria-modal="true" aria-labelledby="modal-demo-title" x-show="open" x-transition:enter.duration.200ms x-transition:enter.opacity.scale.95 x-transition:leave.duration.150ms>
+                <div class="modal-ds__header">
+                    <div class="modal-ds__title-row">
+                        <h2 class="modal-ds__title" id="modal-demo-title">Pradėti iš naujo?</h2>
+                        <button type="button" class="modal-ds__close" @click="open = false" aria-label="Uždaryti">{{ icons.icon('x', 18) }}</button>
+                    </div>
+                    <p class="modal-ds__body">Jūsų pateikti duomenys bus panaikinti. Naują išaiškinimą gausite įvedę duomenis iš naujo.</p>
+                </div>
+                <div class="modal-ds__actions">
+                    <a href="#" class="btn-ds btn-ds--primary" @click.prevent="open = false">Pradėti</a>
+                    <a href="#" class="btn-ds btn-ds--secondary" @click.prevent="open = false">Uždaryti</a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endmacro %}
+
 {% block content %}
     {% include "partials/_page-header.html.twig" with {
         title: 'Modal',
         subtitle: 'Modaliniai langai perima dėmesį svarbiam veiksmui ar pranešimui. Default patvirtinimui, Destructive negrįžtamiems veiksmams (visada su patvirtinimo dialogu), Feedback atsiliepimams rinkti, Form trumpoms formoms, Illustration didesnio konteksto pranešimams su iliustracija.',
     } %}
 
+    {% set modalDemoHtml = _self.modalDemo() %}
+
     <section class="ds-section">
         <h2 class="ds-section__title">Default</h2>
 
         {% embed "partials/_viewport-preview.html.twig" %}
             {% block preview %}
-                <div x-data="{ open: false }">
-                    <button type="button" class="btn-ds btn-ds--primary" @click="open = true">Atidaryti modalą</button>
-
-                    <div class="modal-ds__backdrop" x-show="open" x-cloak @click.self="open = false" @keydown.escape.window="open = false" x-transition.opacity.duration.150ms>
-                        <div class="modal-ds__dialog" role="dialog" aria-modal="true" aria-labelledby="modal-demo-title" x-show="open" x-transition:enter.duration.200ms x-transition:enter.opacity.scale.95 x-transition:leave.duration.150ms>
-                            <div class="modal-ds__header">
-                                <div class="modal-ds__title-row">
-                                    <h2 class="modal-ds__title" id="modal-demo-title">Pradėti iš naujo?</h2>
-                                    <button type="button" class="modal-ds__close" @click="open = false" aria-label="Uždaryti">{{ icons.icon('x', 18) }}</button>
-                                </div>
-                                <p class="modal-ds__body">Jūsų pateikti duomenys bus panaikinti. Naują išaiškinimą gausite įvedę duomenis iš naujo.</p>
-                            </div>
-                            <div class="modal-ds__actions">
-                                <a href="#" class="btn-ds btn-ds--primary" @click.prevent="open = false">Pradėti</a>
-                                <a href="#" class="btn-ds btn-ds--secondary" @click.prevent="open = false">Uždaryti</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                {{ modalDemoHtml }}
             {% endblock %}
         {% endembed %}
+
+        <div class="ds-group" x-data="{
+                expanded: false,
+                copied: false,
+                code: '{{ ('' ~ modalDemoHtml)|e('js') }}',
+                copyCode() {
+                    navigator.clipboard.writeText(this.code).catch(() => {});
+                    this.copied = true;
+                    setTimeout(() => { this.copied = false; }, 2200);
+                }
+            }">
+            <div class="ds-group__row justify-content-end">
+                <button type="button" class="show-code-toggle" x-show="$store.devTools.showCode"
+                        @click="expanded = !expanded; if (expanded) $nextTick(() => Prism.highlightAllUnder($el.closest('.ds-group')))">
+                    <span x-show="!expanded" x-transition.opacity.duration.150ms>{{ icons.icon('code', 16) }} Kodas</span>
+                    <span x-show="expanded" x-transition.opacity.duration.150ms x-cloak>{{ icons.icon('x', 16) }}</span>
+                </button>
+            </div>
+
+            <div class="code-panel" x-show="expanded && $store.devTools.showCode" x-collapse x-cloak>
+                <div class="code-panel__header">
+                    <button type="button" class="code-panel__copy" @click="copyCode()" :title="copied ? 'Nukopijuota' : 'Kopijuoti kodą'">
+                        <span x-show="!copied" x-transition.opacity.duration.150ms>{{ icons.icon('copy', 14) }}</span>
+                        <span x-show="copied" x-transition.opacity.duration.150ms x-cloak>{{ icons.icon('check', 14) }}</span>
+                    </button>
+                </div>
+                <div class="code-panel__body">
+                    <pre class="code-panel__code line-numbers"><code class="language-markup">{{ ('' ~ modalDemoHtml)|e }}</code></pre>
+                </div>
+            </div>
+        </div>
     </section>
 {% endblock %}

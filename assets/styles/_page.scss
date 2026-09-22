@@ -110,10 +110,10 @@
 // Text-heavy documentation pages (Introduction and any future prose page)
 // — Bootstrap's own p/ul defaults are close enough, this just adds the
 // vertical rhythm between them and a brand-neutral inline <code> style
-// instead of Bootstrap's default pink $code-color.
+// instead of Bootstrap's default pink $code-color. No max-width of its
+// own on purpose — .ds-page__subtitle above reads the full column width
+// too, and the two need to line up, not one wrap narrower than the other.
 .ds-prose {
-    max-width: 68ch;
-
     p, ul, ol {
         margin-bottom: map-get($ds-spacers, xl);
     }
