@@ -1,5 +1,6 @@
 {% set currentPage = 'introduction' %}
 {% extends "base.html.twig" %}
+{% import "partials/_icons.html.twig" as icons %}
 
 {% block title %}Introduction — {{ parent() }}{% endblock %}
 
@@ -15,11 +16,11 @@
         <img src="build/images/process-diagram.jpg" alt="Bendras procesas: Figma dizaino sistema, MS Storybook komponentų dokumentacija, Twig/SCSS/JS komponentai, Symfony/Twig produktas, visi grįžta į tą patį dizaino kalbos pagrindą" class="img-fluid d-block">
     </div>
 
-    <div class="ds-group mb-ds-4xl">
+    <div class="ds-group ds-group--note mb-ds-4xl">
+        <span class="ds-group__icon">{{ icons.icon('alert-circle', 20) }}</span>
         <p class="mb-0">
-            MS Storybook kol kas dar MVP, pirma šitų principų versija, kad
-            turėtume nuo ko atsispirti. Tikslinsim kartu, komandoj, nieko
-            čia dar iškalto akmeny.
+            MS Storybook kol kas dar MVP, pirma versija, kad turėtume nuo ko
+            atsispirti. Tikslinsim kartu komandoj!!!
         </p>
     </div>
 

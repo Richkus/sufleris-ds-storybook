@@ -80,6 +80,24 @@
     margin-top: map-get($ds-spacers, "3xl");
 }
 
+// "Important" callout variant — light grey fill + a leading icon, for a
+// note that should visibly stand out from a plain bordered .ds-group
+// (e.g. Introduction's "still a draft" notice).
+.ds-group--note {
+    display: flex;
+    align-items: flex-start;
+    gap: map-get($ds-spacers, lg);
+    background: var(--ds-bg-surface);
+}
+
+.ds-group__icon {
+    display: flex;
+    flex: 0 0 auto;
+    color: var(--ds-text-muted);
+
+    svg { width: 20px; height: 20px; }
+}
+
 .ds-group__label {
     font-size: 14px;
     line-height: 19px;
