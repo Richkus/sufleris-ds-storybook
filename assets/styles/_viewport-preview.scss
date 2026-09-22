@@ -96,9 +96,10 @@
 .viewport-preview__frame--tablet,
 .viewport-preview__frame--mobile {
     flex: 0 0 auto;
-    border: 1px solid var(--ds-border-strong);
-    border-radius: map-get($ds-radii, "2xl");
-    box-shadow: 0 4px 16px rgba($grey-900, 0.08);
+    // No border/shadow of its own — .viewport-preview__stage's outline
+    // is already the frame's boundary. A second border here doubled up
+    // into a nested-box look instead of one plain grey outline.
+    border-radius: map-get($ds-radii, md);
     overflow: hidden;
 }
 
