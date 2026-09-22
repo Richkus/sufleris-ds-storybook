@@ -1,6 +1,7 @@
 {% set currentPage = 'colors' %}
 {% extends "base.html.twig" %}
 {% import "partials/_icons.html.twig" as icons %}
+{% import "partials/_anchor-heading.html.twig" as anchor %}
 
 {% block title %}Colors — {{ parent() }}{% endblock %}
 
@@ -33,8 +34,9 @@
 
 {% macro swatchRow(family, steps) %}
     {% import "partials/_icons.html.twig" as icons %}
+    {% import "partials/_anchor-heading.html.twig" as anchor %}
     <div class="color-family">
-        <h5 class="color-family__title">{{ family.label }}</h5>
+        {{ anchor.heading('h5', family.label, family.key, 'color-family__title') }}
         <div class="color-swatch-row">
             {% for i in 0..8 %}
                 {% set varName = '--ds-' ~ family.key ~ '-' ~ steps[i] %}
@@ -60,7 +62,7 @@
     } %}
 
     <section class="ds-section">
-        <h2 class="ds-section__title">Brand / Identity</h2>
+        {{ anchor.heading('h2', 'Brand / Identity', 'brand-identity', 'ds-section__title') }}
         {% for family in brandFamilies %}
             {{ _self.swatchRow(family, steps) }}
         {% endfor %}
@@ -69,7 +71,7 @@
     <hr class="ds-page__divider">
 
     <section class="ds-section">
-        <h2 class="ds-section__title">Neutral</h2>
+        {{ anchor.heading('h2', 'Neutral', 'neutral', 'ds-section__title') }}
         {% for family in neutralFamilies %}
             {{ _self.swatchRow(family, steps) }}
         {% endfor %}
@@ -78,7 +80,7 @@
     <hr class="ds-page__divider">
 
     <section class="ds-section">
-        <h2 class="ds-section__title">Status &amp; Feedback</h2>
+        {{ anchor.heading('h2', 'Status & Feedback', 'status-feedback', 'ds-section__title') }}
         {% for family in statusFamilies %}
             {{ _self.swatchRow(family, steps) }}
         {% endfor %}
@@ -87,7 +89,7 @@
     <hr class="ds-page__divider">
 
     <section class="ds-section">
-        <h2 class="ds-section__title">Soft accent tints</h2>
+        {{ anchor.heading('h2', 'Soft accent tints', 'soft-accent-tints', 'ds-section__title') }}
         <div class="color-swatch-row">
             {% for tint in softTints %}
                 {% set varName = '--ds-' ~ tint.key %}

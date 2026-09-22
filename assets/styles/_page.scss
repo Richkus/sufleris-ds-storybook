@@ -8,6 +8,51 @@
     margin-bottom: map-get($ds-spacers, "3xl");
 }
 
+// Section/subsection headings that are also deep-link targets — see
+// partials/_anchor-heading.html.twig. Hovering (or keyboard-focusing)
+// the heading reveals a small link-icon button that copies a direct
+// #id URL to this spot.
+.ds-anchor-heading {
+    display: flex;
+    align-items: center;
+    gap: map-get($ds-spacers, sm);
+    // So an anchored scroll (from a pasted #id URL) doesn't land with
+    // the heading flush against the very top edge of the viewport.
+    scroll-margin-top: map-get($ds-spacers, xl);
+}
+
+.ds-anchor-heading__link {
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    background: transparent;
+    border: none;
+    border-radius: map-get($ds-radii, xs);
+    color: var(--ds-text-faint);
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.15s ease, color 0.15s ease, background-color 0.15s ease;
+
+    svg {
+        width: 14px;
+        height: 14px;
+    }
+
+    .ds-anchor-heading:hover &,
+    &:focus-visible {
+        opacity: 1;
+    }
+
+    &:hover {
+        color: var(--ds-text-title);
+        background: var(--ds-bg-surface-hover);
+    }
+}
+
 .ds-page__title-row {
     display: flex;
     align-items: center;

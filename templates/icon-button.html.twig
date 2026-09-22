@@ -1,6 +1,7 @@
 {% set currentPage = 'icon-button' %}
 {% extends "base.html.twig" %}
 {% import "partials/_icons.html.twig" as icons %}
+{% import "partials/_anchor-heading.html.twig" as anchor %}
 
 {% block title %}Icon Button — {{ parent() }}{% endblock %}
 
@@ -33,7 +34,7 @@
     } %}
 
     <section class="ds-section">
-        <h2 class="ds-section__title">Variants &amp; States</h2>
+        {{ anchor.heading('h2', 'Variants & States', 'variants-states', 'ds-section__title') }}
 
         <div class="ds-group">
             <div class="ds-group__label">Icon button / 40</div>

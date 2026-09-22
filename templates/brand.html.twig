@@ -1,6 +1,7 @@
 {% set currentPage = 'brand' %}
 {% extends "base.html.twig" %}
 {% import "partials/_icons.html.twig" as icons %}
+{% import "partials/_anchor-heading.html.twig" as anchor %}
 
 {% block title %}Brand — {{ parent() }}{% endblock %}
 
@@ -11,7 +12,7 @@
     } %}
 
     <section class="ds-section">
-        <h2 class="ds-section__title">Logotipas</h2>
+        {{ anchor.heading('h2', 'Logotipas', 'logotipas', 'ds-section__title') }}
         <div class="d-flex gap-ds-lg flex-wrap mb-ds-xl">
             <div class="logo-tile logo-tile--light">
                 <span class="logo-tile__wordmark">

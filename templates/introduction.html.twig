@@ -1,6 +1,7 @@
 {% set currentPage = 'introduction' %}
 {% extends "base.html.twig" %}
 {% import "partials/_icons.html.twig" as icons %}
+{% import "partials/_anchor-heading.html.twig" as anchor %}
 
 {% block title %}Introduction — {{ parent() }}{% endblock %}
 
@@ -26,7 +27,7 @@
 
     <div class="ds-prose">
         <section class="ds-section">
-            <h2 class="ds-section__title">Kas tai yra</h2>
+            {{ anchor.heading('h2', 'Kas tai yra', 'kas-tai-yra', 'ds-section__title') }}
             <p>
                 MS-DS nėra koks atskiras Figma projektas, kurį vėliau kažkas
                 „išverčia“ į kodą. Čia realus, veikiantis kodas: tas pats
@@ -42,7 +43,7 @@
         </section>
 
         <section class="ds-section">
-            <h2 class="ds-section__title">Principai</h2>
+            {{ anchor.heading('h2', 'Principai', 'principai', 'ds-section__title') }}
             <ul>
                 <li>
                     <strong>Tokenai pirmiausia.</strong> Jokių hardcoded hex/px
@@ -83,7 +84,7 @@
         </section>
 
         <section class="ds-section">
-            <h2 class="ds-section__title">Kada kuriame naują komponentą</h2>
+            {{ anchor.heading('h2', 'Kada kuriame naują komponentą', 'kada-kuriame-nauja-komponenta', 'ds-section__title') }}
             <ul>
                 <li>Pirma patikrinam, ar komponentas jau yra Figma DS byloj, kad nekurtume dublikato.</li>
                 <li>Naudojam esamus tarpų, spalvų, šriftų, radius tokenus; nauja reikšmė tik po pasitarimo.</li>
@@ -96,7 +97,7 @@
         </section>
 
         <section class="ds-section">
-            <h2 class="ds-section__title">Stack'as</h2>
+            {{ anchor.heading('h2', "Stack'as", 'stackas', 'ds-section__title') }}
             <div class="ds-group mb-ds-xl">
                 <img src="build/images/stack-diagram.webp" alt="MS-DS stack'o diagrama: Mokesčių Sufleris centre, aplink SCSS, Bootstrap 5, Symfony, Twig, Alpine.js, Webpack Encore ir Prism.js" class="d-block ds-diagram-img">
             </div>

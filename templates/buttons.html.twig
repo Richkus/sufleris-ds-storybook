@@ -1,6 +1,7 @@
 {% set currentPage = 'buttons' %}
 {% extends "base.html.twig" %}
 {% import "partials/_icons.html.twig" as icons %}
+{% import "partials/_anchor-heading.html.twig" as anchor %}
 
 {% block title %}Buttons — {{ parent() }}{% endblock %}
 
@@ -40,7 +41,7 @@
     } %}
 
     <section class="ds-section">
-        <h2 class="ds-section__title">Variants &amp; States</h2>
+        {{ anchor.heading('h2', 'Variants & States', 'variants-states', 'ds-section__title') }}
 
         {# Primary — the only variant with the real "Show code" interaction. #}
         <div class="ds-group" x-data="{

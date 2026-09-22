@@ -1,0 +1,37 @@
+{#
+    Reusable "anchor heading" — hover reveals a small link-icon button
+    next to the heading text. Clicking it copies a direct URL to this
+    exact spot (origin + pathname + #id) to the clipboard, via the same
+    window.dsCopy() toast used elsewhere, and briefly swaps the icon to
+    a checkmark. Since `id` is a real element id, pasting the copied URL
+    into a browser scrolls straight there — no extra JS needed for that
+    half, it's just how anchors work.
+
+    Usage — reuse everywhere a section/subsection heading is a
+    meaningful deep-link target (component page section titles, color
+    family titles, etc.):
+
+        {% import "partials/_anchor-heading.html.twig" as anchor %}
+        {{ anchor.heading('h2', 'Variants & States', 'variants-states', 'ds-section__title') }}
+
+    `tag` is the heading level to render (h2/h3/h4/h5/...), `id` should
+    be a short, stable, ASCII kebab-case slug unique on that page,
+    `class` (optional) is passed through to the heading element so it
+    keeps whatever page-specific styling it already had (e.g.
+    ds-section__title, color-family__title).
+#}
+{% macro heading(tag, text, id, class) %}
+    {% import "partials/_icons.html.twig" as icons %}
+    <{{ tag }} id="{{ id }}" class="ds-anchor-heading {{ class|default('') }}" x-data="{ copied: false }">
+        <span class="ds-anchor-heading__text">{{ text }}</span>
+        <button type="button" class="ds-anchor-heading__link" @click="
+                const url = window.location.origin + window.location.pathname + '#{{ id }}';
+                window.dsCopy(url, 'Nukopijuota nuoroda');
+                copied = true;
+                setTimeout(() => { copied = false; }, 1500);
+            " :aria-label="copied ? 'Nukopijuota' : 'Kopijuoti nuorodą į šią vietą'" :title="copied ? 'Nukopijuota' : 'Kopijuoti nuorodą į šią vietą'">
+            <span x-show="!copied">{{ icons.icon('link', 14) }}</span>
+            <span x-show="copied" x-cloak>{{ icons.icon('check', 14) }}</span>
+        </button>
+    </{{ tag }}>
+{% endmacro %}

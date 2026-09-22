@@ -1,6 +1,7 @@
 {% set currentPage = 'modal' %}
 {% extends "base.html.twig" %}
 {% import "partials/_icons.html.twig" as icons %}
+{% import "partials/_anchor-heading.html.twig" as anchor %}
 
 {% block title %}Modal — {{ parent() }}{% endblock %}
 
@@ -41,7 +42,7 @@
     {% set modalDemoHtml = _self.modalDemo() %}
 
     <section class="ds-section">
-        <h2 class="ds-section__title">Default</h2>
+        {{ anchor.heading('h2', 'Default', 'default', 'ds-section__title') }}
 
         {% embed "partials/_viewport-preview.html.twig" %}
             {% block preview %}
